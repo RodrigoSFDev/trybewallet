@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchCurrencies } from '../redux/actions';
+import { fetchCurrencies, guardaInfos } from '../redux/actions';
 
 class WalletForm extends Component {
   state = {
-    value: 0,
+    value: '',
     description: '',
-    currency: '',
-    method: '',
-    tag: '',
+    currency: 'USD',
+    method: 'Dinheiro',
+    tag: 'Lazer',
   };
 
   componentDidMount() {
@@ -24,10 +24,30 @@ class WalletForm extends Component {
     this.setState({ [name]: value }, this.verificar);
   };
 
+  fetchAsk = async () => {
+    const response = await fetch('https://economia.awesomeapi.com.br/json/all');
+    const currencies = await response.json();
+    delete currencies.USDT; // Remover a moeda USDT
+    return currencies;
+  };
+
+  saveInfos = async () => {
+    const { value, description, currency, method, tag } = this.state;
+    const { dispatch } = this.props;
+    const exchangeRates = await this.fetchAsk();
+    dispatch(guardaInfos({ value, description, currency, method, tag, exchangeRates }));
+    this.setState({
+      value: '',
+      description: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: 'Lazer',
+    });
+  };
+
   render() {
     const { value, description, currency, method, tag } = this.state;
     const { currencies } = this.props;
-    console.log(currencies);
     return (
       <div>
         <form>
@@ -99,6 +119,12 @@ class WalletForm extends Component {
               <option value="Saúde">Saúde</option>
             </select>
           </label>
+          <button
+            onClick={ this.saveInfos }
+            type="button"
+          >
+            Adicionar despesa
+          </button>
         </form>
       </div>
     );
