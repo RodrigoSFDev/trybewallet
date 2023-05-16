@@ -17,3 +17,9 @@ export const guardaInfos = (payload) => ({
   type: INFOS,
   payload,
 });
+
+export const DELETE_INFOS = 'INFO_DELETE';
+export const deleteInfos = (payload) => ({
+  type: DELETE_INFOS,
+  payload,
+});
