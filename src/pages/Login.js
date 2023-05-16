@@ -38,9 +38,11 @@ class Login extends React.Component {
     const { ativo, senha, email } = this.state;
     return (
       <div>
+        <h1>Trybewallet</h1>
         <input
           type="email"
           name="email"
+          placeholder="digite seu email"
           value={ email }
           data-testid="email-input"
           onChange={ this.handleChange }
@@ -49,6 +51,7 @@ class Login extends React.Component {
         <input
           type="password"
           name="senha"
+          placeholder="digite sua senha"
           value={ senha }
           data-testid="password-input"
           onChange={ this.handleChange }
